@@ -14,7 +14,7 @@ const{ PrismaClient} = require('@prisma/client')
     const prisma = new PrismaClient()
     
 
-    let sql = `insert into tbl-jogo(
+    let sql = `insert into tbl_jogo(
 
                                     nome,
                                     data_lancamento,
@@ -24,14 +24,14 @@ const{ PrismaClient} = require('@prisma/client')
                                     foto_capa,
                                     link
                                     )values(
-                                        ${jogo.nome},
-                                        ${jogo.data_lancamento},
-                                        ${jogo.versao},
-                                        ${jogo.tamanho},
-                                        ${jogo. foto_capa},
-                                        ${jogo.link}
+                                        '${jogo.nome}',
+                                        '${jogo.data_lancamento}',
+                                        '${jogo.versao}',
+                                        '${jogo.tamanho}',
+                                        '${jogo. foto_capa}',
+                                        '${jogo.link}'
 
-                                    )`
+                                    )`;
    //executa o script do banco de dados e AGUARDE O RETORNO DO BANCO    
   let result = await prisma.$executeRawUnsafe(sql)
 
