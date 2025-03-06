@@ -49,9 +49,38 @@ const atualizarJogo = async function(){
 }
 
 //Função para excluir um jogo
-const excluirJogo = async function(){
-
+const excluirJogo = async function(id){
+        try {
+      //ve se o id chega corretamente 
+        if (id == undefined || id == '' || isNaN(id)) {
+          return MESSAGE.ERROR_REQUIRED_FILES // 400 
+         }
+         if(id){
+         let verificar = await jogoDAO.selectByIdJogo(id)
+        let resultJogo = await jogoDAO.deleteJogo(id)
+    
+         if(verificar != false || typeof(verificar) == 'object'){
+             if(verificar.length > 0){
+                 if(resultJogo){
+                     return MESSAGE.ERROR_REQUIRED_FILES
+                   }else {
+                       return MESSAGE.ERROR_NOT_DELETE
+                }
+             }else {
+                 return MESSAGE.ERROR_NOT_DELETE
+             }
+          }else {
+              return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
+          }
+         } 
+     }catch (error){
+         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
+     }
 }
+       
+
+   
+
 
 //Função para retornar todos os jogos
 const listarJogo = async function(){
@@ -75,20 +104,36 @@ const listarJogo = async function(){
             return MESSAGE.ERROR_NOT_FOUND //404
         }
     }else{
-        return MESSAGE.ERRO_INTERNAL_SERVER_MODEL //500
+        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL//500
     }
-    } catch (error) {
-        return MESSAGE.ERRO_INTERNAL_SERVER_CONTROLLER//500
+        } catch (error) {
+         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER//500
     }    
 }
 
 //Função para buscar um jogo
-const buscarJogo = async function(){
+
+//buscar o id 
+const buscarJogo = async function(id){
     try{
         let dadosJogos = {}
-        let resultJogo = await jogoDAO.selectByIdJogo
+
+        if(id == undefined || id == '' || isNaN(id)){}
+
+        let resultJogo = await jogoDAO.selectAllJogo()
+
+            if(resultJogo){
+                dadosJogos.status = true
+                dadosJogos.status_code = 200
+                dadosJogos.games = resultJogo
+    
+                return dadosJogos//200
+            }else {
+                return MESSAGE.ERROR_NOT_FOUND //404
+            }
+        
     }catch(error){
-// criar função de erro trazer para catch (config)
+         return MESSAGE.ERRO_INTERNAL_SERVER_CONTROLLER//500
     }
 }
 
