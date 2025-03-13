@@ -81,6 +81,20 @@ app.delete('/v1/controle-jogos/jogo/delete/:id', cors(), async function (request
         response.status(resultJogo.status_code)
         response.json(resultJogo)
 })
+
+app.put('/v1/controle-jogos/jogo/:id', cors(), bodyParserJSON, async function(request, response) {
+     //recebe o content-type da resquisição  
+     let contentType = request.headers['content-type']
+
+     //Recebe o ID do jogo
+     let idJogo = request.params.id
+     //recebe os dados do jogo encaminhado no body da requisição
+     let dadosBody = request.body
+
+     let resultJogo = await controllerJogo.atualizarJogo(dadosBody, idJogo, contentType)
+     response.status (resultJogo.status_code)
+     response.json(resultJogo)
+})
 app.listen(8080, function(){
         console.log('API aguardando requisições...')
 })

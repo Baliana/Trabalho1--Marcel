@@ -17,19 +17,21 @@ const ERROR_REQUIRED_FILES = {status: false, status_code: 400, message:
         "Não foi possível processar a requisição pois o formato de dados encaminhado não é suportado pelo servidor. Favor encaminhar apenas json!"}
     const ERROR_NOT_FOUND = {status: false, status_code: 404, message: 
         "Não foram encontrado itens para retornar!"} 
-        const ERROR_NOT_DELETE = {status: false, status_code: 400, message: 
+    const ERROR_NOT_DELETE = {status: false, status_code: 400, message: 
                 "Não foram encontrado itens para excluir!"}
     /*******************MENSAGENS DE SUCESSO*******************/
     const SUCESS_CREATED_ITEM = {status: true, status_code: 201, message: "Item criado com sucesso."}
     const SUCESS_DELET_ITEM = { status: true, status_code: 200, message: " item deletado com sucesso."}
+    const SUCESS_UPDATED_ITEM = { status: true, status_code: 200, message: " item ATUALIZADO com sucesso."}
     
  module.exports = {
-        ERROR_REQUIRED_FILES,
- ERROR_INTERNAL_SERVER_CONTROLLER,
- ERROR_INTERNAL_SERVER_MODEL,
- SUCESS_CREATED_ITEM,
- ERROR_CONTENT_TYPE,
- ERROR_NOT_FOUND,
- SUCESS_DELET_ITEM,
- ERROR_NOT_DELETE
+    ERROR_REQUIRED_FILES,
+    ERROR_INTERNAL_SERVER_CONTROLLER,
+    ERROR_INTERNAL_SERVER_MODEL,
+    SUCESS_CREATED_ITEM,
+    ERROR_CONTENT_TYPE,
+    ERROR_NOT_FOUND,
+    SUCESS_DELET_ITEM,
+    ERROR_NOT_DELETE,
+    SUCESS_UPDATED_ITEM
  }    
