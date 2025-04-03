@@ -11,7 +11,6 @@ const insertJogo = async function(jogo){
       let sql = `insert into tbl_jogo(
                                       nome,
                                       data_lancamento,
-                                      versao,
                                       tamanho,
                                       descricao,
                                       foto_capa,
@@ -19,7 +18,6 @@ const insertJogo = async function(jogo){
                                       ) values (
                                       '${jogo.nome}',
                                       '${jogo.data_lancamento}',
-                                      '${jogo.versao}',
                                       '${jogo.tamanho}',
                                       '${jogo.descricao}',
                                       '${jogo.foto_capa}',
@@ -43,7 +41,6 @@ const updateJogo = async function(jogo){
  try{
     let sql = `update tbl_jogo set   nome             = '${jogo.nome}' ,
                                       data_lancamento = '${jogo.data_lancamento}',
-                                      versao          = '${jogo.versao}',
                                       tamanho         = '${jogo.tamanho}',
                                       descricao       = '${jogo.descricao}',
                                       foto_capa       = '${jogo.foto_capa}',

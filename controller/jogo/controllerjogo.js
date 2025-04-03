@@ -50,7 +50,6 @@ const atualizarJogo = async function(jogo,id, contentType){
         if
             (jogo.nome           == undefined   || jogo.nome            == ''   ||  jogo.nome            == null     || jogo.nome.length            > 80  ||
             jogo.data_lancamento == undefined   || jogo.data_lancamento == ''   ||  jogo.data_lancamento == null     || jogo.data_lancamento.length > 10  ||
-            jogo.versao          == undefined   || jogo.versao          == ''   ||  jogo.versao          == null     || jogo.versao.length          > 10  ||
             jogo.tamanho         == undefined   || jogo.tamanho.length  > 10    ||
             jogo.descricao       == undefined   ||
             jogo.foto_capa       == undefined   || jogo.foto_capa.length> 200   ||
