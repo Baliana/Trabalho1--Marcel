@@ -19,7 +19,6 @@ const inserirJogo = async function(jogo, contentType){
         if
         (jogo.nome           == undefined   || jogo.nome            == ''   ||  jogo.nome            == null     || jogo.nome.length            > 80  ||
         jogo.data_lancamento == undefined   || jogo.data_lancamento == ''   ||  jogo.data_lancamento == null     || jogo.data_lancamento.length > 10  ||
-        jogo.versao          == undefined   || jogo.versao          == ''   ||  jogo.versao          == null     || jogo.versao.length          > 10  ||
         jogo.tamanho         == undefined   || jogo.tamanho.length  > 10    ||
         jogo.descricao       == undefined   ||
         jogo.foto_capa       == undefined   || jogo.foto_capa.length> 200   ||
@@ -115,10 +114,6 @@ const excluirJogo = async function(id) {
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
-       
-
-   
-
 
 //Função para retornar todos os jogos
 const listarJogo = async function(){
