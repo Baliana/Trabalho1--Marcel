@@ -4,17 +4,15 @@ const { PrismaClient } = require('@prisma/client')
 //Instancia do prisma client, para gerar um objeto
 const prisma = new PrismaClient()
 
-//função para inserir no banco um novo user
-const insertUser = async function(user){
+//função para inserir no banco um novo Genero
+const insertGenero= async function(Genero){
     try{
-        let sql = `insert into tbl_usuarios(
+        let sql = `insert into tbl_genero(
                                             nome,
-                                            email,
-                                            senha
+                                            genero_descricao
                                             )value (
-                                            '${user.nome}',
-                                             ${user.email}',
-                                            '${user.senha}'
+                                            '${Genero.nome}',
+                                             ${Genero.genero_descricao}'
                                             )`
 
         let result = await prisma.$executeRawUnsafe(sql)
@@ -29,13 +27,12 @@ const insertUser = async function(user){
     }   
 }
 
-//Função para atualizar no banco de dados um usuario existente 
-const updateUsuario = async function(Usuario){
+//Função para atualizar no banco de dados um Genero existente 
+const updateGenero = async function(Genero){
     try{
-       let sql = `update tbl_jogo set   nome   = '${jogo.nome}' ,
-                                         email = '${jogo.email}',
-                                         senha = '${jogo.senha}',
-                             where id = ${jogo.id}`
+       let sql = `update tbl_genero set   nome   = '${Genero.nome}' ,
+                                         genero_descricao = '${Genero.genero_descricao}',
+                             where id = ${Genero.id}`
    
         let result = await prisma.$executeRawUnsafe(sql)
          if(result)
@@ -48,11 +45,11 @@ const updateUsuario = async function(Usuario){
    
    }
    
-   //Função para excluir no banco de dados um Usuario existente
-   const deleteUsuario = async function(id){
+   //Função para excluir no banco de dados um Genero existente
+   const deleteGenero = async function(id){
      try {
        //Deleta pelo ID
-       let sql = 'DELETE FROM tbl_jogo WHERE id = '+id
+       let sql = 'DELETE FROM tbl_genero WHERE id = '+id
        let result = await prisma.$executeRawUnsafe(sql)
    
        if (result)
@@ -66,11 +63,11 @@ const updateUsuario = async function(Usuario){
      
    }
    
-   //Função para retornar do banco de dados uma lista de Usuario
-   const selectAllUsuario = async function(){
+   //Função para retornar do banco de dados uma lista de Genero
+   const selectAllGenero = async function(){
      try{
        //Script SQL para retornar os dados do BD
-       let sql = 'select * from tbl_jogo order by id desc'
+       let sql = 'select * from tbl_genero order by id desc'
    
        //Executa o Script SQL e aguarda o retorno dos dados
        let result = await prisma.$queryRawUnsafe(sql)
@@ -85,12 +82,12 @@ const updateUsuario = async function(Usuario){
      }
    }
    
-   //Função para buscar no banco de dados um Usuario pelo ID
+   //Função para buscar no banco de dados um Genero pelo ID
    
-   const selectByIdUsuario = async function(id) {
+   const selectByIdGenero = async function(id) {
      try {
          //buscar o id 
-         let sql = `select * from tbl_jogo where id = ${id}`
+         let sql = `select * from tbl_genero where id = ${id}`
          //Executa o Script SQL e aguarda o retorno dos dados
          let result = await prisma.$queryRawUnsafe(sql)
    
@@ -105,5 +102,9 @@ const updateUsuario = async function(Usuario){
    }
 
 module.exports = {
-    
+  insertGenero,
+  updateGenero,
+  deleteGenero,
+  selectAllGenero,
+  selectByIdGenero
 }

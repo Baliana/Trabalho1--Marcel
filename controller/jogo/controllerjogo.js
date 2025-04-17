@@ -145,7 +145,6 @@ const listarJogo = async function(){
 }
 
 //Função para buscar um jogo
-
 //buscar o id 
 const buscarJogo = async function(id){
     try{
