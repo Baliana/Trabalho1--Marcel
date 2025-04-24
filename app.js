@@ -95,24 +95,13 @@ app.put('/v1/controle-jogos/jogo/:id', cors(), bodyParserJSON, async function(re
      response.status (resultJogo.status_code)
      response.json(resultJogo)
 })
-app.listen(8080, function(){
-        console.log('API aguardando requisições...')
-})
 
 //API usuarios
 
 //Import das controlles para realizar o CRUD de dados
 const controllerjogosUsuarios = require('./controller/usuarios_jogo/controllerjogosUsuarios.js')
 
-app.use((request, response, next) => {
-        response.header('Access-Control-Allow-Origin', '*')
-        response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-
-        app.use(cors())
-        next()
-})
-
-//EndPoint para inserir um jogo no BD
+//EndPoint para inserir um usuario no BD
 app.post('/v1/controle-usuario/usuario', cors(), bodyParserJSON, async function(request, response){
 
         //Recebe o content type para validar o tipo de dados da requisição
@@ -136,3 +125,17 @@ app.get('/v1/controle-usuarios/usuarios', cors(), async function (request, respo
         response.json(resultusuarios)
 })
 
+//EndPoint para retornar  jogos atrves do id
+app.get('/v1/controle-usuario/usuario/:id', cors(), async function (request, response) {
+        const id = request.params.id
+        let resultusuarios = await controllerjogosUsuarios.buscarUsuario(id)
+    
+        response.status(resultusuarios.status_code);
+        response.json(resultusuarios)
+})
+
+
+
+app.listen(8080, function(){
+        console.log('API aguardando requisições...')
+})

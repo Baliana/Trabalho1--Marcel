@@ -81,6 +81,7 @@ const updateUsuario = async function(Usuario){
          return false
    
      } catch (error) {
+        console.log(error)
          return false 
      }
    }
