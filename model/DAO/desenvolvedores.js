@@ -5,15 +5,17 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 //Função para inserir no banco de dados um novo desenvolvedor
-const insertDesenvolvedor = async function(desenvolvedor){
+const insertDesenvolvedores = async function(desenvolvedores){
+  
+  
   try {
-
-      let sql = `insert into tbl_desenvolvedor(
-                                       data_fabricada,
+    
+      let sql = `insert into tbl_desenvolvedores(
+                                       data_fabricado,
                                        pais
                                       ) values (
-                                      '${desenvolvedor.data_fabricada}',
-                                      '${desenvolvedor.pais}'
+                                      '${desenvolvedores.data_fabricado}',
+                                      '${desenvolvedores.pais}'
                                       )`
       //Executa o script SQL no BD e Aguarda o retorno do BD                                
       let result = await prisma.$executeRawUnsafe(sql)
@@ -29,11 +31,11 @@ const insertDesenvolvedor = async function(desenvolvedor){
 }
 
 //Função para atualizar no banco de dados um desenvolvedor existente 
-const updateDesenvolvedor= async function(desenvolvedor){
+const updateDesenvolvedor= async function(desenvolvedores){
  try{
-    let sql = `update tbl_desenvolvedor set data_fabricada = '${desenvolvedor.data_fabricada}' ,
-                                                pais = '${desenvolvedor.pais}'
-                          where id = ${desenvolvedor.id}`
+    let sql = `update tbl_desenvolvedores set data_fabricado = '${desenvolvedores.data_fabricado}' ,
+                                                pais = '${desenvolvedores.pais}'
+                          where id_desenvolvedores = ${desenvolvedores.id}`
 
      let result = await prisma.$executeRawUnsafe(sql)
       if(result)
@@ -50,7 +52,7 @@ const updateDesenvolvedor= async function(desenvolvedor){
 const deleteDesenvolvedor = async function(id){
   try {
     //Deleta pelo ID
-    let sql = 'DELETE FROM tbl_desenvolvedor WHERE id = '+id
+    let sql = 'DELETE FROM tbl_desenvolvedores WHERE id_desenvolvedores = '+id
     let result = await prisma.$executeRawUnsafe(sql)
 
     if (result)
@@ -68,7 +70,7 @@ const deleteDesenvolvedor = async function(id){
 const selectAllDesenvolvedor= async function(){
   try{
     //Script SQL para retornar os dados do BD
-    let sql = 'select * from tbl_desenvolvedor order by id desc'
+    let sql = 'select * from tbl_desenvolvedores order by id_desenvolvedores desc'
 
     //Executa o Script SQL e aguarda o retorno dos dados
     let result = await prisma.$queryRawUnsafe(sql)
@@ -79,6 +81,7 @@ const selectAllDesenvolvedor= async function(){
       return false
 
   } catch (error) {
+      
       return false 
   }
 }
@@ -88,7 +91,9 @@ const selectAllDesenvolvedor= async function(){
 const selectByIdDesenvolvedor = async function(id) {
   try {
       //buscar o id 
-      let sql = `select * from tbl_desenvolvedor where id = ${id}`
+      let sql = `select * from tbl_desenvolvedores where id_desenvolvedores = ${id}`
+      console.log(sql);
+      
       //Executa o Script SQL e aguarda o retorno dos dados
       let result = await prisma.$queryRawUnsafe(sql)
 
@@ -98,12 +103,13 @@ const selectByIdDesenvolvedor = async function(id) {
           return false
       }
   } catch (error) {
+   
       return false
   }
 }
 
 module.exports = {
-    insertDesenvolvedor,
+  insertDesenvolvedores,
     updateDesenvolvedor,
     deleteDesenvolvedor,
     selectAllDesenvolvedor,

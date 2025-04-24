@@ -31,13 +31,15 @@ const insertUser = async function(user){
 
 //Função para atualizar no banco de dados um usuario existente 
 const updateUsuario = async function(Usuario){
+  console.log(Usuario);
+  
     try{
-       let sql = `update tbl_usuarios set nome = '${user.nome}' ,
-                                         email = '${user.email}',
-                                         senha = '${user.senha}',
-                             where id = ${user.id}`
-   
-        let result = await prisma.$executeRawUnsafe(sql)
+       let sql = `update tbl_usuarios set nome = '${Usuario.nome}' ,
+                                         email = '${Usuario.email}',
+                                         senha = '${Usuario.senha}'
+                             where id_usuarios = ${Usuario.id}`
+        console.log(sql);
+        let result = await prisma.$executeRawUnsafe(sql)       
          if(result)
            return true
          else
@@ -52,7 +54,7 @@ const updateUsuario = async function(Usuario){
    const deleteUsuario = async function(id){
      try {
        //Deleta pelo ID
-       let sql = 'DELETE FROM tbl_usuarios WHERE id = '+id
+       let sql = 'DELETE FROM tbl_usuarios WHERE id_usuarios = '+id
        let result = await prisma.$executeRawUnsafe(sql)
    
        if (result)
@@ -70,7 +72,7 @@ const updateUsuario = async function(Usuario){
    const selectAllUsuario = async function(){
      try{
        //Script SQL para retornar os dados do BD
-       let sql = 'select * from tbl_usuarios order by id desc'
+       let sql = 'select * from tbl_usuarios order by id_usuarios desc'
    
        //Executa o Script SQL e aguarda o retorno dos dados
        let result = await prisma.$queryRawUnsafe(sql)
@@ -91,7 +93,7 @@ const updateUsuario = async function(Usuario){
    const selectByIdUsuario = async function(id) {
      try {
          //buscar o id 
-         let sql = `select * from tbl_usuarios where id = ${id}`
+         let sql = `select * from tbl_usuarios where id_usuarios = ${id}`
          //Executa o Script SQL e aguarda o retorno dos dados
          let result = await prisma.$queryRawUnsafe(sql)
    

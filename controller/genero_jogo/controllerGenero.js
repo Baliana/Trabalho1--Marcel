@@ -14,12 +14,12 @@ const inserirGenero = async function(Genero,contentType ) {
         if(contentType == 'application/json'){
             if
             (Genero.nome     == undefined || Genero .nome      == '' || Genero.nome      == null  || Genero.nome.length > 80  ||
-            Genero.descricao == undefined || Genero .descricao == '' || Genero.descricao == null  || Genero.descricao.length > 80  
+            Genero.genero_descricao == undefined 
         ){
             return MESSAGE.ERROR_REQUIRED_FILES      //400
         }else{
             //Encaminha os dados do novo usuario para ser inserido no BD
-            let resultGenero  = await GeneroDAO.inserirGenero(Genero )
+            let resultGenero  = await GeneroDAO.insertGenero(Genero )
             
             if(resultGenero )
                 return MESSAGE.SUCESS_CREATED_ITEM   //201
@@ -40,7 +40,7 @@ const atualizarGenero = async function(Genero,id, contentType){
     if(contentType == 'application/json'){
         if
             (Genero.nome     == undefined  || Genero.nome      == '' ||  Genero.nome      == null  || Genero.nome.length  > 80  ||
-            Genero.descricao == undefined  || Genero.descricao == '' ||  Genero.descricao == null  || Genero.descricao .length > 10  
+            Genero.genero_descricao == undefined
          ){
             return MESSAGE.ERROR_REQUIRED_FILES      //400
         }else{

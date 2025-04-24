@@ -44,9 +44,10 @@ const atualizarUsuario = async function(Usuario,id, contentType){
   try {
     if(contentType == 'application/json'){
         if
-            (Usuario.nome    == undefined  || Usuario.nome   == '' ||  Usuario.nome  == null  || Usuario.nome.length  > 80  ||
-             Usuario.email   == undefined  || Usuario.email  == '' ||  Usuario.email == null  || Usuario.email.length > 10  ||
-             Usuario.senha   == undefined  || Usuario.senha  == '' || Usuario.senha  == null  || Usuario.nome.length > 80  
+            (
+            Usuario.nome    == undefined  || Usuario.nome   == '' ||  Usuario.nome  == null  || Usuario.nome.length  > 80  ||
+             Usuario.email   == undefined  || Usuario.email  == '' ||  Usuario.email == null  || Usuario.email.length > 45  ||
+             Usuario.senha   == undefined  || Usuario.senha  == '' || Usuario.senha  == null  || Usuario.nome.length > 25  
            
          ){
             return MESSAGE.ERROR_REQUIRED_FILES      //400

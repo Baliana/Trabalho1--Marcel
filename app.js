@@ -133,9 +133,156 @@ app.get('/v1/controle-usuario/usuario/:id', cors(), async function (request, res
         response.status(resultusuarios.status_code);
         response.json(resultusuarios)
 })
+//EndPoint para deletar um jogo 
+app.delete('/v1/controle-usuario/usuario/delete/:id', cors(), async function (request, response){
+        let id = request.params.id
+        let resultusuario = await controllerjogosUsuarios.excluirUsuario(id)
+
+        response.status(resultusuario.status_code)
+        response.json(resultusuario)
+})
+
+app.put('/v1/controle-usuario/usuario/:id', cors(), bodyParserJSON, async function(request, response) {
+        //recebe o content-type da resquisição  
+        let contentType = request.headers['content-type']
+   
+        //Recebe o ID do jogo
+        let idusuario = request.params.id
+        //recebe os dados do jogo encaminhado no body da requisição
+        let dadosBody = request.body
+   
+        let resultusuario = await controllerjogosUsuarios.atualizarUsuario(dadosBody, idusuario, contentType)
+        response.status (resultusuario.status_code)
+        response.json(resultusuario)
+   })
 
 
+//api genero
 
-app.listen(8080, function(){
+//Import das controlles para realizar o CRUD de dados
+const controllerGenero = require('./controller/genero_jogo/controllerGenero.js')
+
+//EndPoint para inserir um usuario no BD
+app.post('/v1/controle-genero/genero', cors(), bodyParserJSON, async function(request, response){
+
+        let contentType = request.headers['content-type']
+    //Recebe o conteúdo do body da requisição
+        let dadosBody = request.body
+        //Encaminhando os dados do Body da requisição para a controller inserir no BD
+        let resultGenero = await controllerGenero.inserirGenero(dadosBody, contentType)
+    
+        response.status(resultGenero.status_code)
+        response.json(resultGenero)
+})
+    
+
+//EndPoint para retornar uma lista de genero
+app.get('/v1/controle-genero/genero', cors(), async function (request, response) {
+        let resultGenero = await controllerGenero.listarGenero()
+    
+        response.status(resultGenero.status_code)
+        response.json(resultGenero)
+})
+          
+//EndPoint para retornar  genero atraves do id
+app.get('/v1/controle-genero/genero/:id', cors(), async function (request, response) {
+        let idGenero = request.params.id
+    
+        let resultGenero = await controllerGenero.buscarGenero(idGenero)
+    
+        response.status(resultGenero.status_code)
+        response.json(resultGenero)
+})
+
+//EndPoint para deletar um genero 
+app.delete('/v1/controle-genero/genero/delete/:id', cors(), async function (request, response) {
+        let id = request.params.id 
+      
+        let resultGenero = await controllerGenero.excluirGenero(id)
+      
+        response.status(resultGenero.status_code)
+        response.json(resultGenero)
+})
+
+
+app.put('/v1/controle-genero/genero/:id', cors(), bodyParserJSON, async function(request, response){
+
+        //Recebe o content-type da requisição
+        let contentType = request.headers['content-type']
+        //Recebe o id do jogo 
+        let idGenero = request.params.id 
+
+        //Recebe os dados do jogo encaminhando no body da requisição
+        let dadosBody = request.body
+
+        let resultGenero = await controllerGenero.atualizarGenero(dadosBody, idGenero, contentType)
+
+        response.status(resultGenero.status_code)
+        response.json(resultGenero)
+})      
+
+
+//api desenvolvedores
+
+//Import das controlles para realizar o CRUD de dados
+const controlllerDesenvolvedores = require('./controller/desenvolvedores/controlllerdesenvolvedores.js')
+
+//EndPoint para inserir um desenvolvedores no BD
+app.post('/v1/controle-desenvolvedores/desenvolvedores', cors(), bodyParserJSON, async function(request, response){
+
+        let contentType = request.headers['content-type']
+    //Recebe o conteúdo do body da requisição
+        let dadosBody = request.body
+        //Encaminhando os dados do Body da requisição para a controller inserir no BD
+        let resultDesenvolvedores = await controlllerDesenvolvedores.inserirDesenvolvedores(dadosBody, contentType)
+    
+        response.status(resultDesenvolvedores.status_code)
+        response.json(resultDesenvolvedores)
+})
+
+//EndPoint para retornar uma lista de desenvolvedores
+app.get('/v1/controle-desenvolvedores/desenvolvedores', cors(), async function (request, response) {
+        let resultDesenvolvedores = await controlllerDesenvolvedores.listarDesenvolvedores()
+    
+        response.status(resultDesenvolvedores.status_code)
+        response.json(resultDesenvolvedores)
+})
+//EndPoint para retornar  desenvolvedores atraves do id
+app.get('/v1/controle-desenvolvedores/desenvolvedores/:id', cors(), async function (request, response) {
+        let idDesenvolvedores = request.params.id
+    
+        let resultDesenvolvedores = await controlllerDesenvolvedores.buscarDesenvolvedores(idDesenvolvedores)
+        
+    
+        response.status(resultDesenvolvedores.status_code)
+        response.json(resultDesenvolvedores)
+})
+    
+//EndPoint para deletar um desenvolvedores 
+app.delete('/v1/controle-desenvolvedores/desenvolvedores/delete/:id', cors(), async function (request, response) {
+        let id = request.params.id 
+      
+        let resultDesenvolvedores = await controlllerDesenvolvedores.excluirDesenvolvedores(id)
+      
+        response.status(resultDesenvolvedores.status_code)
+        response.json(resultDesenvolvedores)
+})
+
+app.put('/v1/controle-desenvolvedores/desenvolvedores/:id', cors(), bodyParserJSON, async function(request, response){
+
+        //Recebe o content-type da requisição
+        let contentType = request.headers['content-type']
+        //Recebe o id do jogo 
+        let idDesenvolvedores = request.params.id 
+
+        //Recebe os dados do jogo encaminhando no body da requisição
+        let dadosBody = request.body
+
+        let resultDesenvolvedores = await controlllerDesenvolvedores.atualizarDesenvolvedores(dadosBody, idDesenvolvedores, contentType)
+
+        response.status(resultDesenvolvedores.status_code)
+        response.json(resultDesenvolvedores)
+})  
+app.listen(8088, function(){
         console.log('API aguardando requisições...')
 })

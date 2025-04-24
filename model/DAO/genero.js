@@ -7,15 +7,20 @@ const prisma = new PrismaClient()
 //função para inserir no banco um novo Genero
 const insertGenero= async function(Genero){
     try{
+      console.log(Genero);
+      
         let sql = `insert into tbl_genero(
                                             nome,
                                             genero_descricao
                                             )value (
                                             '${Genero.nome}',
-                                             ${Genero.genero_descricao}'
+                                             '${Genero.genero_descricao}'
                                             )`
 
+        console.log(sql);
         let result = await prisma.$executeRawUnsafe(sql)
+        console.log(result);
+        
                                            
         if(result)
           return true
@@ -29,11 +34,15 @@ const insertGenero= async function(Genero){
 
 //Função para atualizar no banco de dados um Genero existente 
 const updateGenero = async function(Genero){
+  
+  
     try{
        let sql = `update tbl_genero set   nome   = '${Genero.nome}' ,
-                                         genero_descricao = '${Genero.genero_descricao}',
-                             where id = ${Genero.id}`
-   
+                                         genero_descricao = '${Genero.genero_descricao}'
+                             where id_genero = ${Genero.id}`
+        
+        console.log(sql);
+        
         let result = await prisma.$executeRawUnsafe(sql)
          if(result)
            return true
@@ -49,7 +58,7 @@ const updateGenero = async function(Genero){
    const deleteGenero = async function(id){
      try {
        //Deleta pelo ID
-       let sql = 'DELETE FROM tbl_genero WHERE id = '+id
+       let sql = 'DELETE FROM tbl_genero WHERE id_genero = '+id
        let result = await prisma.$executeRawUnsafe(sql)
    
        if (result)
@@ -67,7 +76,7 @@ const updateGenero = async function(Genero){
    const selectAllGenero = async function(){
      try{
        //Script SQL para retornar os dados do BD
-       let sql = 'select * from tbl_genero order by id desc'
+       let sql = 'select * from tbl_genero order by id_genero desc'
    
        //Executa o Script SQL e aguarda o retorno dos dados
        let result = await prisma.$queryRawUnsafe(sql)
@@ -87,7 +96,7 @@ const updateGenero = async function(Genero){
    const selectByIdGenero = async function(id) {
      try {
          //buscar o id 
-         let sql = `select * from tbl_genero where id = ${id}`
+         let sql = `select * from tbl_genero where id_genero = ${id}`
          //Executa o Script SQL e aguarda o retorno dos dados
          let result = await prisma.$queryRawUnsafe(sql)
    
