@@ -52,11 +52,11 @@ const atualizarDesenvolvedores = async function(desenvolvedores,id, contentType)
         }else{
             //validar se o ID existe no banco de dados 
             let resultdesenvolvedores = await desenvolvedoresDAO.selectByIdDesenvolvedor(parseInt(id))
-            console.log(resultdesenvolvedores);
+    
             
             if(resultdesenvolvedores.status_code == 200){
                 //update
-                //adicio um atribudo ID no JSON para encaminhar o ide da requisição 
+                //adicio um atribudo ID no JSON para encaminhar o id da requisição 
                 desenvolvedores.id = parseInt(id)
                 let result = await desenvolvedoresDAO.updateDesenvolvedor(desenvolvedores)
 
@@ -65,7 +65,6 @@ const atualizarDesenvolvedores = async function(desenvolvedores,id, contentType)
                 }else {
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                 }
-
             }else if (resultdesenvolvedores.status_code == 404){
                 return MESSAGE.ERROR_NOT_FOUND //404
             }else {
@@ -77,7 +76,6 @@ const atualizarDesenvolvedores = async function(desenvolvedores,id, contentType)
     }
   } catch (error) {
     return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
-    
   }
 }
 
