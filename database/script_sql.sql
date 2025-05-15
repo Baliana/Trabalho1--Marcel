@@ -3,6 +3,7 @@ use db_controle_jogos_bb;
 
 create table tbl_jogo(
 	 id int not null primary key auto_increment,
+	 id_faixa_etaria int not null,
      nome varchar(80) not null,
      data_lancamento date not null,
      tamanho varchar(10),

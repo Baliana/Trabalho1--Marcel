@@ -15,9 +15,10 @@ const jogoDAO = require('../../model/DAO/jogo.js')
 const inserirJogo = async function(jogo, contentType){
     try {
 
-        if(contentType == 'application/json'){
+        if(String(contentType).toLowerCase() == 'application/json'){
         if
         (jogo.nome           == undefined   || jogo.nome            == ''   ||  jogo.nome            == null     || jogo.nome.length            > 80  ||
+        jogo.id_faixa_etaria == undefined   || jogo.id_faixa_etaria == ''   ||  id         ==null      || isNaN(id)            || id<=0               ||
         jogo.data_lancamento == undefined   || jogo.data_lancamento == ''   ||  jogo.data_lancamento == null     || jogo.data_lancamento.length > 10  ||
         jogo.tamanho         == undefined   || jogo.tamanho.length  > 10    ||
         jogo.descricao       == undefined   ||
@@ -53,12 +54,13 @@ const atualizarJogo = async function(jogo,id, contentType){
             jogo.descricao       == undefined   ||
             jogo.foto_capa       == undefined   || jogo.foto_capa.length> 200   ||
             jogo.link            == undefined   || jogo.link.length     > 200   ||
-            id                   == undefined   || id                    ==''   ||  id         ==null      || isNaN(id)            || id<=0
+            id                   == undefined   || id                    ==''   ||  id         ==null      || isNaN(id)            || id<=0 ||
+            jogo.id_faixa_etaria == undefined   || jogo.id_faixa_etaria == ''   ||  id         ==null      || isNaN(id)            || id<=0  
          ){
             return MESSAGE.ERROR_REQUIRED_FILES      //400
         }else{
             //validar se o ID existe no banco de dados 
-            let resultJogo = await buscarJogo(parseInt(id))
+            let resultJogo = await jogoDAO.buscarJogo(parseInt(id))
 
             if(resultJogo.status_code == 200){
                 //update
@@ -95,19 +97,19 @@ const excluirJogo = async function(id) {
       if ( id == ''|| id == undefined || id == null|| isNaN(id) || id <=0) {
         return MESSAGE.ERROR_REQUIRED_FILES // 400 
       }else{
-        let resultJogo = await buscarJogo(parseInt(id))
+        let resultJogo = await jogoDAO.selectByIdJogo(parseInt(id))
         if(resultJogo.status_code == 200){
             let result = await jogoDAO.deleteJogo(parseInt(id))
 
             if(result){
                 return MESSAGE.SUCESS_DELET_ITEM // 200
             }else{
-                MESSAGE.ERROR_INTERNAL_SERVER_MODEL
+                MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
             }
         }else if(resultJogo.status_code == 404){
             return MESSAGE.ERROR_NOT_FOUND //404
         }else{
-            return MESSAGE.ERRO_INTERNAL_SERVER_CONTROLLER //500
+            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
         }
       }
     }catch (error){
@@ -120,6 +122,9 @@ const listarJogo = async function(){
     try{
         let dadosJogos = {}
 
+        //Objeto do tipo array para utilizar no foreach para carregar os dados 
+        //do filme e da classificacao
+        const arrayJogo = []
     //Chamo a função para retornar os dados do jogo
         let resultJogo = await jogoDAO.selectAllJogo()
 
@@ -132,7 +137,28 @@ const listarJogo = async function(){
             dadosJogos.items = resultJogo.length
             dadosJogos.games = resultJogo
 
-            return dadosJogos//200
+           //resultJogo.forEach(async function(itemjogo){
+                //foi necessário substituir o foreach pelo for of, pois
+                //o foreach não consegue trabalhar com requisições async e await
+                for(itemjogo of resultJogo){
+                    //Busca os dados da Genero na controller de Genero
+                    //Utilizando o ID da Genero (Chave estrangeira)
+                    let dadosGenro = await controllerGenero.buscargenerp(itemjogo.id_genero)
+                    
+                    //Adicionando um atributo "Genero" no JSON de filmes
+                    itemjogo.Genero = dadosGenro.Genero
+                    //Remove o atributo id_Genero do JSON de filmes, pois já temos
+                    //o ID dentro dos dados da Genero
+                    delete itemjogo.id_genero
+                    //Adiciona o JSON do filme, agora com os dados da Genero
+                    //em um array
+                    arrayJogo.push(itemjogo)
+                }
+                 //Adiciona o novo array de filmes no JSON para retornar ao APP
+                 dadosJogos.jogo = arrayJogo
+
+                 return dadosJogos
+
         }else {
             return MESSAGE.ERROR_NOT_FOUND //404
         }
