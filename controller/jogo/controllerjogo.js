@@ -11,6 +11,7 @@ const MESSAGE = require('../../module/config.js')
 //Import do DAO para realizar o CRUD no BD
 const jogoDAO = require('../../model/DAO/jogo.js')
 
+
 //Função para inserir um novo jogo
 const inserirJogo = async function(jogo, contentType){
     try {
@@ -18,7 +19,7 @@ const inserirJogo = async function(jogo, contentType){
         if(String(contentType).toLowerCase() == 'application/json'){
         if
         (jogo.nome           == undefined   || jogo.nome            == ''   ||  jogo.nome            == null     || jogo.nome.length            > 80  ||
-        jogo.id_faixa_etaria == undefined   || jogo.id_faixa_etaria == ''   ||  id         ==null      || isNaN(id)            || id<=0               ||
+        jogo.id_faixa_etaria == ''          || filme.id_classificacao  == undefined ||
         jogo.data_lancamento == undefined   || jogo.data_lancamento == ''   ||  jogo.data_lancamento == null     || jogo.data_lancamento.length > 10  ||
         jogo.tamanho         == undefined   || jogo.tamanho.length  > 10    ||
         jogo.descricao       == undefined   ||
@@ -55,25 +56,29 @@ const atualizarJogo = async function(jogo,id, contentType){
             jogo.foto_capa       == undefined   || jogo.foto_capa.length> 200   ||
             jogo.link            == undefined   || jogo.link.length     > 200   ||
             id                   == undefined   || id                    ==''   ||  id         ==null      || isNaN(id)            || id<=0 ||
-            jogo.id_faixa_etaria == undefined   || jogo.id_faixa_etaria == ''   ||  id         ==null      || isNaN(id)            || id<=0  
+            jogo.id_faixa_etaria == ''          || filme.id_classificacao  == undefined
          ){
             return MESSAGE.ERROR_REQUIRED_FILES      //400
         }else{
             //validar se o ID existe no banco de dados 
             let resultJogo = await jogoDAO.buscarJogo(parseInt(id))
 
-            if(resultJogo.status_code == 200){
-                //update
-                //adicio um atribudo ID no JSON para encaminhar o ide da requisição 
-                jogo.id = parseInt(id)
-                let result = await jogoDAO.updateJogo(jogo)
+            if(resultJogo != false || typeof(resultJogo) == 'object'){
+                if(resultJogo.length > 0 ){
+                    //Update
+                    //Adiciona o ID do jogo no JSON com os dados
+                    jogo.id = parseInt(id)
 
-                if(result){
-                    return  MESSAGE.SUCESS_UPDATED_ITEM//200
-                }else {
-                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                    let result = await jogoDAO.updateJogo(jogo)
+
+                    if(result){
+                        return MESSAGE.SUCESS_UPDATED_ITEM //200
+                    }else{
+                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL//500
+                    }
+                }else{
+                    return MESSAGE.ERROR_NOT_FOUND //404
                 }
-
             }else if (resultJogo.status_code == 404){
                 return MESSAGE.ERROR_NOT_FOUND //404
             }else {
@@ -98,16 +103,20 @@ const excluirJogo = async function(id) {
         return MESSAGE.ERROR_REQUIRED_FILES // 400 
       }else{
         let resultJogo = await jogoDAO.selectByIdJogo(parseInt(id))
-        if(resultJogo.status_code == 200){
-            let result = await jogoDAO.deleteJogo(parseInt(id))
+        if(resultJogo != false || typeof(resultJogo) == 'object'){
+            //Se existir, faremos o delete
+            if(resultJogo.length > 0){
+                //delete
+                let result = await jogoDAODAO.deleteJogo(parseInt(id))
 
-            if(result){
-                return MESSAGE.SUCESS_DELET_ITEM // 200
+                if(result){
+                    return MESSAGE.SUCESS_DELET_ITEM //200
+                }else{
+                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                }
             }else{
-                MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                return MESSAGE.ERROR_NOT_FOUND //404
             }
-        }else if(resultJogo.status_code == 404){
-            return MESSAGE.ERROR_NOT_FOUND //404
         }else{
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
         }
@@ -173,31 +182,44 @@ const listarJogo = async function(){
 //Função para buscar um jogo
 //buscar o id 
 const buscarJogo = async function(id){
-    try{
-        let dadosJogos = {}
+    try {
 
-        if(id == undefined || id == '' || isNaN(id)){
+        let arrayFilmes = []
+        
+        if(id == '' || id == undefined || id == null || isNaN(id) || id <=0){
             return MESSAGE.ERROR_REQUIRED_FILES //400
+        }else{
+            dadosFilme = {}
+
+            let resultJogo = await jogoDAO.selectByIdJogo(parseInt(id))
+            
+            if(resultJogo != false || typeof(resultJogo) == 'object'){
+                if(resultJogo.length > 0){
+                     //Criando um JSON de retorno de dados para a API
+                    dadosJogos.status = true
+                    dadosJogos.status_code = 200
+
+                    //o foreach não consegue trabalhar com requisições async e await
+                    for(itemjogo of resultJogo){
+                      
+                        arrayFilmes.push(itemFilme)
+                    }
+
+                    dadosFilme.films = arrayFilmes
+
+                    return dadosFilme //200
+                }else{
+                    return message.ERROR_NOT_FOUND //404
+                }
+            }else{
+                return message.ERROR_INTERNAL_SERVER_MODEL //500
+            }
         }
 
-        let resultJogo = await jogoDAO.selectByIdJogo(id)
-
-        //criar um objeto do tipo JSON para retornar a lista de jogos
-            if(resultJogo){
-                dadosJogos.status = true
-                dadosJogos.status_code = 200
-                dadosJogos.games = resultJogo
-    
-                return dadosJogos//200
-            }else {
-                return MESSAGE.ERROR_NOT_FOUND //404
-            }
-        
-    }catch(error){
-         return MESSAGE.ERRO_INTERNAL_SERVER_CONTROLLER//500
+    } catch (error) {
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
-
 module.exports = {
     inserirJogo,
     atualizarJogo,
